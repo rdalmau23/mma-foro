@@ -1,7 +1,7 @@
 // components/CreatePost.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Importar axios
+import axios from 'axios';
 
 const CreatePost = () => {
     const [title, setTitle] = useState('');
@@ -11,7 +11,7 @@ const CreatePost = () => {
 
     const handleImageChange = (e) => {
         if (e.target.files.length > 0) {
-            setSelectedImage(e.target.files[0]); // Guarda la imagen seleccionada
+            setSelectedImage(e.target.files[0]);
         }
     };
 
@@ -22,19 +22,19 @@ const CreatePost = () => {
         formData.append('title', title);
         formData.append('content', content);
         if (selectedImage) {
-            formData.append('image', selectedImage); // Asegúrate de que selectedImage esté definido
+            formData.append('image', selectedImage);
         }
     
         try {
             const response = await axios.post('http://localhost:5000/api/posts', formData, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`, // Envía el token
-                    'Content-Type': 'multipart/form-data', // Asegúrate de que el tipo de contenido sea multipart
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'multipart/form-data',
                 },
             });
     
-            if (response.status === 201) { // Verifica si la creación fue exitosa
-                navigate('/'); // Redirige a la página principal
+            if (response.status === 201) {
+                navigate('/');
             } else {
                 console.error('Error al crear el post:', response.statusText);
             }
@@ -49,26 +49,35 @@ const CreatePost = () => {
     };
     
     return (
-        <form onSubmit={handlePostSubmit}>
+        <form onSubmit={handlePostSubmit} className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md space-y-6">
+            <h2 className="text-2xl font-semibold text-gray-800">Crear Nueva Publicación</h2>
             <input
                 type="text"
                 placeholder="Título"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
+                className="w-full p-3 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
             <textarea
                 placeholder="Contenido"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 required
+                className="w-full p-3 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 h-40 resize-none"
             />
             <input
                 type="file"
                 accept="image/*"
-                onChange={handleImageChange} // Maneja el cambio de la imagen
+                onChange={handleImageChange}
+                className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
             />
-            <button type="submit">Crear Publicación</button>
+            <button
+                type="submit"
+                className="w-full py-3 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition duration-200 ease-in-out"
+            >
+                Crear Publicación
+            </button>
         </form>
     );
 };

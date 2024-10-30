@@ -13,11 +13,12 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-
+    
             if (response.status === 200) {
-                const { token } = response.data; // Asegúrate de que la respuesta incluya el token
+                const { token, username } = response.data; // Extrae también el `username` de la respuesta
                 localStorage.setItem('token', token);
-                login(token); // Guardar el token en el contexto
+                localStorage.setItem('username', username); // Guarda el username en localStorage
+                login(token, username); // Pasa el token y el username al contexto
                 navigate('/'); // Redirigir al inicio después de iniciar sesión
             } else {
                 console.error('Error de inicio de sesión:', response.data.message);
@@ -29,6 +30,7 @@ const Login = () => {
             }
         }
     };
+    
 
     return (
         <form onSubmit={handleSubmit}>

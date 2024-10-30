@@ -47,6 +47,31 @@ exports.createPost = (req, res) => {
     );
 };
 
+exports.deletePost = (req, res) => {
+    const postId = req.params.id; // Obtiene el ID de la publicación a eliminar
+    const userId = req.user.userId; // Obtén el ID del usuario autenticado
+
+    // Verificar si la publicación pertenece al usuario
+    db.get(`SELECT * FROM posts WHERE id = ?`, [postId], (err, post) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (!post) {
+            return res.status(404).json({ message: 'Publicación no encontrada.' });
+        }
+        if (post.user_id !== userId) {
+            return res.status(403).json({ message: 'No tienes permiso para eliminar esta publicación.' });
+        }
+
+        // Si la publicación existe y pertenece al usuario, eliminarla
+        db.run(`DELETE FROM posts WHERE id = ?`, [postId], function(err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.status(200).json({ message: 'Publicación eliminada con éxito.' });
+        });
+    });
+};
 // Obtener todas las publicaciones
 exports.getPosts = (req, res) => {
     db.all(

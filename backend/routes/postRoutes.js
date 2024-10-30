@@ -1,6 +1,6 @@
 // backend/routes/postRoutes.js
 const express = require('express');
-const { createPost, getPosts } = require('../controllers/postController');
+const { createPost, getPosts, deletePost } = require('../controllers/postController');
 const authMiddleware = require('../middleware/authMiddleware'); // Asegúrate de que este esté incluido
 const upload = require('../middleware/uploadMiddleware');
 
@@ -11,5 +11,7 @@ router.post('/', authMiddleware, upload.single('image'), createPost); // Incluye
 
 // Ruta para obtener publicaciones
 router.get('/', getPosts);
+
+router.delete('/:id', authMiddleware, deletePost);
 
 module.exports = router;

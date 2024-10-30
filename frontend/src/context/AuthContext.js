@@ -12,10 +12,10 @@ export const AuthProvider = ({ children }) => {
         setToken(token);
         setUsername(user); // Almacenar el nombre de usuario
         setIsAuthenticated(true);
-        // Guarda el token y el nombre de usuario en el localStorage
         localStorage.setItem('token', token);
-        localStorage.setItem('username', user);
+        localStorage.setItem('username', user); // Guarda el nombre de usuario en localStorage
     };
+    
 
     const logout = () => {
         setToken(null);
